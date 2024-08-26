@@ -4,11 +4,11 @@ import React, { useState } from "react";
 import { addTable } from "../../lib/api";
 
 interface AddTableFormProps {
-  onTableAdded: () => void;
+  onTableAdded: () => void; // Define o tipo da prop onTableAdded
 }
 
 const AddTableForm: React.FC<AddTableFormProps> = ({ onTableAdded }) => {
-  const [name, setName] = useState("");
+  const [name, setName] = useState<string>("");
   const [seats, setSeats] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
 
@@ -19,7 +19,8 @@ const AddTableForm: React.FC<AddTableFormProps> = ({ onTableAdded }) => {
       setName("");
       setSeats(0);
       setError(null);
-      onTableAdded(); // Chama a função de callback para atualizar a lista de mesas
+      // Chame onTableAdded após adicionar a mesa com sucesso
+      onTableAdded();
     } catch (err) {
       setError("Failed to add table");
     }
@@ -27,31 +28,26 @@ const AddTableForm: React.FC<AddTableFormProps> = ({ onTableAdded }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2>Add a New Table</h2>
       <div>
-        <label>
-          Name:
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </label>
+        <label htmlFor="name">Name</label>
+        <input
+          id="name"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
       </div>
       <div>
-        <label>
-          Seats:
-          <input
-            type="number"
-            value={seats}
-            onChange={(e) => setSeats(Number(e.target.value))}
-            required
-          />
-        </label>
+        <label htmlFor="seats">Seats</label>
+        <input
+          id="seats"
+          type="number"
+          value={seats}
+          onChange={(e) => setSeats(Number(e.target.value))}
+        />
       </div>
-      {error && <p style={{ color: "red" }}>{error}</p>}
       <button type="submit">Add Table</button>
+      {error && <p>{error}</p>}
     </form>
   );
 };

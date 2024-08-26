@@ -1,40 +1,32 @@
 // src/app/page.tsx
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { fetchTables } from "../lib/api";
 import AddTableForm from "./components/AdicionarMesaForm";
 
-const HomePage = () => {
+const Page: React.FC = () => {
   const [tables, setTables] = useState<any[]>([]);
-  const [error, setError] = useState<string | null>(null);
+
+  const fetchData = async () => {
+    try {
+      const data = await fetchTables();
+      setTables(data);
+    } catch (err) {
+      console.error("Failed to fetch tables", err);
+    }
+  };
 
   useEffect(() => {
-    const loadTables = async () => {
-      try {
-        const tablesData = await fetchTables();
-        setTables(tablesData);
-      } catch (error) {
-        setError("Error fetching tables");
-      }
-    };
-
-    loadTables();
+    fetchData();
   }, []);
 
-  // Função de callback para atualizar a lista de mesas
   const handleTableAdded = async () => {
-    try {
-      const tablesData = await fetchTables();
-      setTables(tablesData);
-    } catch (error) {
-      setError("Error fetching tables");
-    }
+    await fetchData(); // Atualiza a lista após a adição de uma nova mesa
   };
 
   return (
     <div>
       <h1>Tables</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
       <ul>
         {tables.map((table, index) => (
           <li key={index}>
@@ -47,4 +39,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default Page;

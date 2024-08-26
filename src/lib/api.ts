@@ -1,27 +1,27 @@
 // src/lib/api.ts
 
-const API_BASE_URL = "http://localhost:5000/api"; // URL do backend
+const API_URL = "/api/tables"; // Caminho relativo à API do Next.js
+
+// Atualize o tipo para corresponder aos dados que você está enviando
+export interface Table {
+  name: string;
+  seats: number;
+}
 
 export async function fetchTables() {
-  const response = await fetch(`${API_BASE_URL}/tables`);
-  if (!response.ok) {
-    throw new Error("Failed to fetch tables");
-  }
+  const response = await fetch(API_URL);
+  if (!response.ok) throw new Error("Failed to fetch tables");
   return response.json();
 }
 
-export async function addTable(table: { name: string; seats: number }) {
-  const response = await fetch(`${API_BASE_URL}/tables`, {
+export async function addTable(table: Table) {
+  const response = await fetch(API_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(table),
   });
-  if (!response.ok) {
-    throw new Error("Failed to add table");
-  }
+  if (!response.ok) throw new Error("Failed to add table");
   return response.json();
 }
-
-// Adicione outras funções conforme necessário
